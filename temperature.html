@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DHT-11 Temperature Monitoring</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #333;
+            color: #fff;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background-color: #444;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #00A5C0;
+        }
+        #temperatureDisplay {
+            font-size: 24px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>DHT-11 Temperature Monitoring</h1>
+        <div id="temperatureDisplay">
+            <span id="temperatureValue"></span> °C
+        </div>
+    </div>
+
+    <script>
+        function updateTemperature(temperature) {
+            document.getElementById("temperatureValue").innerText = temperature;
+        }
+
+        function getTemperature() {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        var temperature = xhr.responseText;
+                        updateTemperature(temperature);
+                    }
+                }
+            };
+            xhr.open("GET", "/update", true);
+            xhr.send();
+        }
+
+        // Update temperature every 2 seconds (2000 ms)
+        setInterval(getTemperature, 2000);
+    </script>
+</body>
+</html>
+
